@@ -1,3 +1,4 @@
 *.pyc
 .vagrant/*
 dukedoms_archive_env/*
+daleria_env/*

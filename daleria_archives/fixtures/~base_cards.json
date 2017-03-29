@@ -1,6 +1,6 @@
 [
   {
-    "model": "deleria_archive.card",
+    "model": "daleria_archives.card",
     "pk": 1,
     "fields": {
       "name": "hovel",
@@ -12,7 +12,7 @@
     }
   },
   {
-    "model": "deleria_archive.card",
+    "model": "daleria_archives.card",
     "pk": 2,
     "fields": {
       "name": "copper",
@@ -24,17 +24,15 @@
     }
   },
   {
-    "model": "deleria_archive.card",
+    "model": "daleria_archives.card",
     "pk": 3,
     "fields": {
       "name": "braggart",
       "type": "action",
       "treasure": 0,
       "cost": 6,
-      "victory_points": 1
-      "actions": {
-        ['Gain x gold', 2]
-      }
+      "victory_points": 1,
+      "actions": None
     }
   }
 ]
