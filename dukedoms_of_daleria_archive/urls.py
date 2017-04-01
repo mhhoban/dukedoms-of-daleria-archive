@@ -20,5 +20,6 @@ from daleria_archives import views
 
 urlpatterns = [
     url(r'^$', views.home_page, name="home"),
+    url(r'^full-list/$', views.full_list, name="full menu"),
     #url(r'^admin/', admin.site.urls),
 ]
