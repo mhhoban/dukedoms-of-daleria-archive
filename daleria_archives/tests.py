@@ -1,15 +1,47 @@
-from daleria_archives.views import home_page, full_list_page
+from daleria_archives.views import (home_page,
+                                   full_list_page,
+                                   request_list_page)
 from daleria_archives.models import Card
 from django.core import serializers
 from django.core.urlresolvers import resolve
 from django.test import TestCase
 import HTMLParser
 
+class CustomListPageTest(TestCase):
+
+    def test_custom_list_page_loads(self):
+        response = resolve('/request-list')
+        self.assertEqual(response.func,
+                         request_list_page,
+                         'custom list page not properly resolving')
+
+    def test_custom_list_page_serves_valid_request(self):
+        response = self.client.post(
+                   '/request-list',
+                   data={"request_set":"[1,2,3]"}
+                   )
+        self.assertEqual(response.status_code,
+                         200,
+                         'custom_list not serving valid request')
+
+    def test_custom_list_page_does_not_serve_invalid_request(self):
+        get_response = self.client.get('/request-list')
+        self.assertEqual(get_response.status_code,
+                         404,
+                         'custom_list serving get request')
+
+        bad_data_response = self.client.post(
+                            '/request-list',
+                            data={"cards":"[1,2,3]"}                            )
+        self.assertEqual(bad_data_response.status_code,
+                         404,
+                         'custom_list serving bad POST request')
+
 class HomePageLoadsTest(TestCase):
 
     def test_archive_homepage_loads(self):
-        home_page_candidate = resolve('/')
-        self.assertEqual(home_page_candidate.func,
+        response = resolve('/')
+        self.assertEqual(response.func,
                          home_page,
                          'root url not resolving to homepage')
 
