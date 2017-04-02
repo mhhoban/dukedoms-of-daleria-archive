@@ -15,6 +15,14 @@ class HomePageLoadsTest(TestCase):
 
 class FullListPageTest(TestCase):
 
+    def unescape_html(self, html):
+        parser = HTMLParser.HTMLParser()
+        unescaped_html = parser.unescape(
+            html
+        )
+
+        return unescaped_html
+
     def test_full_page_endpoint_loads(self):
         full_list_page_candidate = resolve('/full-list/')
         self.assertEqual(full_list_page_candidate.func,
@@ -46,10 +54,7 @@ class FullListPageTest(TestCase):
             '/full-list/'
         )
 
-        parser = HTMLParser.HTMLParser()
-        response_content = parser.unescape(
-            response.content
-        )
+        response_content = self.unescape_html(response.content)
         cardDb_contents = serializers.serialize(
             'json',
             Card.objects.all()
