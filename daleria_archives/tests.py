@@ -60,4 +60,7 @@ class FullListPageTest(TestCase):
             Card.objects.all()
         )
 
-        self.assertEqual(str(response_content).strip(), str(cardDb_contents))
+        self.assertEqual(
+            str(response_content).strip(),
+            str(cardDb_contents),
+            'database serving incorrect data')
