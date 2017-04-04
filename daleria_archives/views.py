@@ -2,6 +2,7 @@ from django.core import serializers
 from django.shortcuts import render
 from daleria_archives.models import Card
 from django.http import HttpResponseNotFound
+import json
 
 def validate_custom_list_request(request):
     """
@@ -10,12 +11,17 @@ def validate_custom_list_request(request):
 
     if request.method != 'POST':
         return False
-    try:
-        request.POST['request_set']
-    except KeyError:
-        return False
 
     return True
+
+def fetch_custom_list(request_set):
+    """
+    fetches custom list items from db
+    """
+
+    card_list = [Card.objects.get(pk=card) for card in request_set]
+
+    return serializers.serialize('json',card_list)
 
 def full_list_page(request):
     """
@@ -30,7 +36,9 @@ def request_list_page(request):
     """
 
     if validate_custom_list_request(request):
-        return render(request, 'serve-json.html', {'data': 'blarg'})
+        request_contents = json.loads(request.body)
+        card_list = fetch_custom_list(request_contents['request_set'])
+        return render(request, 'serve-json.html', {'data': card_list})
 
     else:
         return HttpResponseNotFound('data not found')

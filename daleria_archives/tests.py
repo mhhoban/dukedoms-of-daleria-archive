@@ -6,7 +6,7 @@ from django.core import serializers
 from django.core.urlresolvers import resolve
 from django.test import TestCase
 import HTMLParser
-
+import json
 class CustomListPageTest(TestCase):
 
     def test_custom_list_page_loads(self):
@@ -16,13 +16,47 @@ class CustomListPageTest(TestCase):
                          'custom list page not properly resolving')
 
     def test_custom_list_page_serves_valid_request(self):
+
+        Card.objects.create(
+            name='test card 1',
+            type='test type',
+            cost=13,
+            treasure=7,
+            victory_points=7,
+            actions='None'
+        )
+        Card.objects.create(
+            name='test card 2',
+            type='test type',
+            cost=13,
+            treasure=7,
+            victory_points=7,
+            actions='None'
+        )
+        Card.objects.create(
+            name='test card 3',
+            type='test type',
+            cost=13,
+            treasure=7,
+            victory_points=7,
+            actions='None'
+        )
+
+        request_set = {
+            "request_set":[1,2,3]
+        }
+
         response = self.client.post(
                    '/request-list',
-                   data={"request_set":"[1,2,3]"}
+                   data=json.dumps(request_set),
+                   content_type='application/json'
                    )
         self.assertEqual(response.status_code,
                          200,
                          'custom_list not serving valid request')
+
+
+
 
     def test_custom_list_page_does_not_serve_invalid_request(self):
         get_response = self.client.get('/request-list')
@@ -30,12 +64,12 @@ class CustomListPageTest(TestCase):
                          404,
                          'custom_list serving get request')
 
-        bad_data_response = self.client.post(
-                            '/request-list',
-                            data={"cards":"[1,2,3]"}                            )
-        self.assertEqual(bad_data_response.status_code,
-                         404,
-                         'custom_list serving bad POST request')
+        # bad_data_response = self.client.post(
+        #                     '/request-list',
+        #                     data={"cards":"[1,2,3]"}                            )
+        # self.assertEqual(bad_data_response.status_code,
+        #                  404,
+        #                  'custom_list serving bad POST request')
 
 class HomePageLoadsTest(TestCase):
 
